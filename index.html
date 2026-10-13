@@ -8,46 +8,90 @@
     <meta name="theme-color" content="#059669">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-md w-full bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl text-center">
-        <div class="text-4xl mb-4">🛡️</div>
-        <h1 class="text-2xl font-bold text-emerald-400 mb-2">Guardião Pro</h1>
-        <p class="text-sm text-slate-400 mb-6">Sistema de monitorização e segurança ativo (PWA).</p>
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-full text-xs font-semibold mb-6">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sistema Online
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <!-- PAINEL PRINCIPAL DO APLICATIVO -->
+    <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-2xl backdrop-blur-md">
+        
+        <!-- Cabeçalho -->
+        <div class="text-center mb-6">
+            <div class="inline-block p-3 bg-slate-800/80 rounded-full border border-slate-700 mb-3 shadow-inner">
+                <span class="text-3xl">🛡️</span>
+            </div>
+            <h1 class="text-2xl font-bold text-emerald-400 tracking-wide">Guardião Pro</h1>
+            <p class="text-xs text-slate-400 mt-1">Central de Inteligência e Segurança (Blindado)</p>
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950/80 border border-emerald-800 text-emerald-400 rounded-full text-xs font-semibold mt-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sistema 100% Seguro
+            </div>
         </div>
-        <div>
-            <button id="btnInstalar" class="hidden w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded-xl transition">
-                Instalar Aplicativo
-            </button>
+
+        <!-- Formulário / Ações -->
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-2">Registar Ocorrência / Alerta:</label>
+                <textarea id="ocorrenciaInput" rows="3" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition resize-none" placeholder="Ex: Movimento estranho no portão principal..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="analisarIA()" class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-lg shadow-emerald-950">
+                    🤖 Analisar IA
+                </button>
+                <button onclick="enviarTelegram()" class="flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-lg shadow-sky-950">
+                    🚀 Telegram
+                </button>
+            </div>
         </div>
+
+        <!-- Histórico -->
+        <div class="mt-6 pt-4 border-t border-slate-800/80">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-400">Histórico de Ocorrências:</span>
+                <button onclick="limparHistorico()" class="text-xs text-rose-400 hover:text-rose-300 transition">Limpar</button>
+            </div>
+            <div id="historicoContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                <p id="semOcorrencias" class="text-xs text-slate-500 italic text-center py-2">Nenhum evento registado.</p>
+            </div>
+        </div>
+
     </div>
 
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
-                .then(() => console.log('Service Worker registado com sucesso!'));
+            .then(() => console.log('Service Worker registado com sucesso!'))
+            .catch(err => console.log('SW Erro:', err));
         }
 
-        let deferredPrompt;
-        const btnInstalar = document.getElementById('btnInstalar');
+        function analisarIA() {
+            const text = document.getElementById('ocorrenciaInput').value;
+            if(!text) return alert('Por favor, digite uma ocorrência.');
+            adicionarAoHistorico('IA: ' + text);
+            document.getElementById('ocorrenciaInput').value = '';
+        }
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            btnInstalar.classList.remove('hidden');
+        function enviarTelegram() {
+            const text = document.getElementById('ocorrenciaInput').value;
+            if(!text) return alert('Por favor, digite uma ocorrência.');
+            adicionarAoHistorico('Telegram: ' + text);
+            document.getElementById('ocorrenciaInput').value = '';
+        }
 
-            btnInstalar.addEventListener('click', () => {
-                btnInstalar.classList.add('hidden');
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('Utilizador aceitou instalar a PWA');
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        });
+        function adicionarAoHistorico(msg) {
+            const container = document.getElementById('historicoContainer');
+            const sem = document.getElementById('semOcorrencias');
+            if(sem) sem.remove();
+
+            const item = document.createElement('div');
+            item.className = 'bg-slate-950/60 border border-slate-800 p-2.5 rounded-lg text-xs text-slate-300 flex justify-between items-center';
+            item.innerText = msg;
+            container.prepend(item);
+        }
+
+        function limparHistorico() {
+            const container = document.getElementById('historicoContainer');
+            container.innerHTML = '<p id="semOcorrencias" class="text-xs text-slate-500 italic text-center py-2">Nenhum evento registado.</p>';
+        }
     </script>
 </body>
 </html>
