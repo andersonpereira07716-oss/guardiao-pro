@@ -38,7 +38,7 @@ const manifestContent = JSON.stringify({
 
 const swContent = `
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open('guardiao-pro-v13').then((cache) => cache.addAll(['/', '/index.html', '/manifest.json', '/splash.png', '/icon.png'])));
+  e.waitUntil(caches.open('guardiao-pro-v14').then((cache) => cache.addAll(['/', '/index.html', '/manifest.json', '/splash.png', '/icon.png'])));
 });
 self.addEventListener('fetch', (e) => {
   e.respondWith(caches.match(e.request).then((response) => response || fetch(e.request)));
@@ -57,21 +57,17 @@ const htmlContent = `<!DOCTYPE html>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-0 m-0 selection:bg-emerald-500 selection:text-white">
     
-    <!-- Tela de Apresentação (Splash Screen com a Imagem Real Cyberpunk) -->
-    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col justify-between items-center p-6 overflow-y-auto">
-        <div class="w-full max-w-sm flex-1 flex flex-col items-center justify-center text-center space-y-4 my-auto">
-            
-            <div class="w-full rounded-2xl overflow-hidden border border-emerald-500/40 shadow-2xl shadow-emerald-950/90 bg-slate-900">
-                <img src="/splash.png" alt="Guardião Pro Splash" class="w-full h-auto object-cover">
-            </div>
-
-            <button onclick="entrarApp()" class="w-full py-3.5 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition tracking-widest shadow-xl shadow-emerald-950">
+    <!-- Tela de Apresentação (Splash Screen com Fundo Imersivo) -->
+    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/splash.png');">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+        
+        <div class="relative z-10 w-full max-w-sm mx-auto pb-8 space-y-4 text-center">
+            <button onclick="entrarApp()" class="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition tracking-widest shadow-2xl shadow-emerald-950 border border-emerald-400/40">
                 ENTRAR →
             </button>
-        </div>
-
-        <div class="text-[10px] text-slate-500 tracking-widest uppercase">
-            Um amanhã mais seguro começa agora
+            <div class="text-[10px] text-slate-400 tracking-widest uppercase">
+                Um amanhã mais seguro começa agora
+            </div>
         </div>
     </div>
 

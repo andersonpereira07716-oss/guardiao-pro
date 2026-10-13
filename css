@@ -1,0 +1,7 @@
+body {
+    background-color: #050b14;
+    background-image: url('/caminho/para/sua-imagem.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

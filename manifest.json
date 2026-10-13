@@ -1,16 +1,19 @@
 {
-  "name": "Guardião Pro - Inteligência e Segurança",
-  "short_name": "Guardião Pro",
-  "description": "Aplicativo inteligente de monitorização, análise de ameaças com IA e alertas de segurança em tempo real.",
+  "name": "Guardião Pro",
+  "short_name": "GuardiãoPro",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#030712",
-  "theme_color": "#059669",
+  "background_color": "#050b14",
+  "theme_color": "#050b14",
   "icons": [
     {
-      "src": "https://guardiao-pro.vercel.app/icon.png",
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -18,11 +21,11 @@
   ],
   "screenshots": [
     {
-      "src": "https://guardiao-pro.vercel.app/splash.png",
-      "sizes": "512x512",
+      "src": "/screenshots/screen1.png",
+      "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Tela de Apresentação Guardião Pro"
+      
     }
   ]
 }
