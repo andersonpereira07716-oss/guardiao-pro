@@ -1,4 +1,4 @@
-name: Build Guardião Pro APK
+name: Build Guardião Pro PWA
 
 on:
   push:
@@ -12,16 +12,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: setup-node@v4
         with:
           node-version: 20
 
-      - name: Gerar Pacote Android APK via PWABuilder
-        run: |
-          npx @pwabuilder/cli package --manifest https://guardiao-pro.vercel.app/manifest.json --platforms android --directory ./apk-output
+      - name: Instalar Dependências
+        run: npm install
 
-      - name: Enviar APK Gerado
+      - name: Compactar Aplicação para PWABuilder
+        run: |
+          mkdir -p dist
+          cp -r public/* dist/ 2>/dev/null || true
+          cp index.html dist/ 2>/dev/null || true
+          cp manifest.json dist/ 2>/dev/null || true
+
+      - name: Enviar Artefato PWA
         uses: actions/upload-artifact@v4
         with:
-          name: GuardiaoPro-APK
-          path: ./apk-output/
+          name: GuardiaoPro-PWA-Files
+          path: dist/
