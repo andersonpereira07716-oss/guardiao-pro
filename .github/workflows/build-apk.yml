@@ -16,14 +16,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Instalar dependências
-        run: npm install
+      - name: Instalar PWABuilder CLI
+        run: npm install -g @pwabuilder/cli
 
-      - name: Compilar artefatos / PWA Build
-        run: npm run build --if-present
+      - name: Gerar Pacote Android APK
+        run: |
+          pwabuilder package --manifest https://guardiao-pro.vercel.app/manifest.json --platforms android --directory ./apk-output
 
-      - name: Enviar APK / Artefatos
+      - name: Enviar APK Gerado
         uses: actions/upload-artifact@v4
         with:
-          name: GuardiaoPro-Build
-          path: public/
+          name: GuardiaoPro-APK
+          path: ./apk-output/
