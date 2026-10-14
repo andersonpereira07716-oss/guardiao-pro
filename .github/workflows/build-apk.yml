@@ -16,12 +16,9 @@ jobs:
         with:
           node-version: 20
 
-      - name: Instalar PWABuilder CLI
-        run: npm install -g @pwabuilder/cli
-
-      - name: Gerar Pacote Android APK
+      - name: Gerar Pacote Android APK via PWABuilder
         run: |
-          pwabuilder package --manifest https://guardiao-pro.vercel.app/manifest.json --platforms android --directory ./apk-output
+          npx @pwabuilder/cli package --manifest https://guardiao-pro.vercel.app/manifest.json --platforms android --directory ./apk-output
 
       - name: Enviar APK Gerado
         uses: actions/upload-artifact@v4
